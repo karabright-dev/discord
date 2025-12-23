@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  certwarden:
+    container_name: certwarden
+    image: ghcr.io/gregtwallace/certwarden:latest
+    restart: unless-stopped
+    ports:
+      - 4050:4050 # server interface (http)
+      - 4055:4055 # server interface (https)
+      - 4060:4060 # http-01 challenge server (http)
+      - 4065:4065 # pprof debug server (http)
+      - 4070:4070 # pprof debug server (https)
+    entrypoint: "/tmp/startup.sh"
+    volumes:
+      - "./certwarden:/app/data"
+      - "./certwarden-startup/root_ca.crt:/usr/local/share/ca-certificates/root_ca.crt"
+      - "./certwarden-startup/startup.sh:/tmp/startup.sh"
